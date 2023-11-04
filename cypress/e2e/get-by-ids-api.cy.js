@@ -1,16 +1,15 @@
 ///<reference types="cypress"/>
 
-describe('Chamada buscar dispositivos', () => {
+describe('Chamada para buscar dispositivos', () => {
 
 
 
-    it('Buscar um dispositivo especifico', () => {
+    it('Buscar dispositivos por ids', () => {
 
-        const device_id = '7' 
-        
+             
         cy.request({
             method: 'GET',
-            url: `https://api.restful-api.dev/objects/${device_id}`,
+            url: `https://api.restful-api.dev/objects?id=${device_id}&id=${device_id1}&id=${device_id2}`,
             failOnStatusCode: false
 
         }).as('getDeviceResult')
