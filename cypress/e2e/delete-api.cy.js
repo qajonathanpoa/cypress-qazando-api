@@ -17,7 +17,7 @@ describe('Delete de um dispositivo', () => {
         }
         cy.api({
             method: 'POST',
-            url: 'https://api.restful-api.dev/objects',
+            url: '/objects',
             failOnStatusCode: false,
             body: body1
         }).as('postDeviceResults')
@@ -46,4 +46,46 @@ describe('Delete de um dispositivo', () => {
 
 
     })
+
+    it('Deletando um dispositivo que não existe', () => {
+
+       
+            //chamando o método DELETE para deletar o registro que nao existe
+            cy.api({
+
+                method: 'DELETE',
+                url: `/objects/999`,
+                failOnStatusCode: false
+
+
+            }).as('deleteDeviceResults')
+            cy.get('@deleteDeviceResults').then((response_delete) => {
+
+                expect(response_delete.status).equal(404)
+                expect(response_delete.body.error).equal(`Object with id = 999 doesn't exist.`)
+            })
+
+        })
+
+
+        it('Deletando um dispositivo de código reservado', () => {
+
+       
+            //chamando o método DELETE para deletar o registro que existe mas é reservado e não pode ser deletado
+            cy.api({
+
+                method: 'DELETE',
+                url: `/objects/7`,
+                failOnStatusCode: false
+
+
+            }).as('deleteDeviceResults')
+            cy.get('@deleteDeviceResults').then((response_delete) => {
+
+                expect(response_delete.status).equal(405)
+                expect(response_delete.body.error).equal('7 is a reserved id and the data object of it cannot be deleted. You can create your own new object via POST request and try to send a DELETE request with new generated object id.')
+            })
+
+        })
+
 })

@@ -2,28 +2,16 @@
 
 describe('Cadastro de dispositivos', () => {
 
-        
+    const payload_cadastro_dispositivo = require('../fixtures/cadastrarDevice.json')
+      
     it.only('Cadastrar um dispositivo', () => {
       
         //Criada constante utilizando o método slice do js para pegar
         //os 10 primeiros caracteres da data e comparar no expect
         const dataAtual = new Date().toISOString().slice(0, 10)
-        const body1 = {
-
-            "name": "Celular Samsung A6",
-            "data": {
-                "year": 2021,
-                "price": 1300.05,
-                "CPU model": "Samsung SNAPDRAGON 1",
-                "Hard disk size": "500 MB"
-            }
-        }
-        cy.api({
-            method: 'POST',
-            url: 'https://api.restful-api.dev/objects',
-            failOnStatusCode: false,
-            body: body1
-        }).as('postDeviceResults')
+              
+        //Chamando o command criado no e2e.js
+        cy.cadastrarDevice(payload_cadastro_dispositivo).as('postDeviceResults')
 
         //validações
         cy.get('@postDeviceResults').then((response_post) => {
