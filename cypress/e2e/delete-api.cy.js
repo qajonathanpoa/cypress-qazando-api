@@ -2,40 +2,18 @@
 
 describe('Delete de um dispositivo', () => {
 
+    const payload_cadastro_dispositivo = require('../fixtures/cadastrarDevice.json')
 
     it('Deletando um dispositivo por código', () => {
 
-        const body1 = {
-
-            "name": "Celular Samsung A6",
-            "data": {
-                "year": 2021,
-                "price": 1300.05,
-                "CPU model": "Samsung SNAPDRAGON 1",
-                "Hard disk size": "500 MB"
-            }
-        }
-        cy.api({
-            method: 'POST',
-            url: '/objects',
-            failOnStatusCode: false,
-            body: body1
-        }).as('postDeviceResults')
-
+        cy.cadastrarDevice(payload_cadastro_dispositivo).as('postDeviceResults')
         //validações
         cy.get('@postDeviceResults').then((response_post) => {
 
             expect(response_post.status).equal(200)
 
             //chamando o método DELETE para deletar o registro criado
-            cy.api({
-
-                method: 'DELETE',
-                url: `https://api.restful-api.dev/objects/${response_post.body.id}`,
-                failOnStatusCode: false
-
-
-            }).as('deleteDeviceResults')
+            cy.deletarDispositivoById(response_post.body.id).as('deleteDeviceResults')
             cy.get('@deleteDeviceResults').then((response_delete) => {
 
                 expect(response_delete.status).equal(200)
@@ -51,14 +29,7 @@ describe('Delete de um dispositivo', () => {
 
        
             //chamando o método DELETE para deletar o registro que nao existe
-            cy.api({
-
-                method: 'DELETE',
-                url: `/objects/999`,
-                failOnStatusCode: false
-
-
-            }).as('deleteDeviceResults')
+            cy.deletarDispositivoById('999').as('deleteDeviceResults')
             cy.get('@deleteDeviceResults').then((response_delete) => {
 
                 expect(response_delete.status).equal(404)
@@ -72,14 +43,7 @@ describe('Delete de um dispositivo', () => {
 
        
             //chamando o método DELETE para deletar o registro que existe mas é reservado e não pode ser deletado
-            cy.api({
-
-                method: 'DELETE',
-                url: `/objects/7`,
-                failOnStatusCode: false
-
-
-            }).as('deleteDeviceResults')
+            cy.deletarDispositivoById('7').as('deleteDeviceResults')
             cy.get('@deleteDeviceResults').then((response_delete) => {
 
                 expect(response_delete.status).equal(405)

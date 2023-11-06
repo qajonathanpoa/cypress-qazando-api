@@ -37,6 +37,32 @@ Cypress.Commands.add('atualizarDevice', (response,body_update) => {
 
     }).then((response) => { return response })
 })
+
+Cypress.Commands.add('atualizarDeviceByCampoEspecifico', (response,body_patch) => {
+    
+    cy.api({
+    method: 'PATCH',
+    url: `/objects/${response.body.id}`,
+    body: body_patch,
+    failOnStatusCode: false
+
+    }).then((response) => { return response })
+})
+
+Cypress.Commands.add('deletarDispositivoById', (device_id) => {
+    
+    cy.api({
+
+        method: 'DELETE',
+        url: `/objects/${device_id}`,
+        failOnStatusCode: false
+
+ 
+    }).then((response) => { return response })
+})
+
+
+
 //
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
